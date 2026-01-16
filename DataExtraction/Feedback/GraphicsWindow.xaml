@@ -1,0 +1,47 @@
+﻿<Window x:Class="Feedback.GraphicsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:Feedback.Controls"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBlock Text="查看类别:"/>
+            <ComboBox Name="cboType" Width="80" Margin="10,0,0,0">
+                <ComboBoxItem Content="墙"/>
+                <ComboBoxItem Content="阳台扶手轮廓"/>
+                <ComboBoxItem Content="门线"/>
+                <ComboBoxItem Content="窗线"/>
+                <ComboBoxItem Content="功能区"/>
+            </ComboBox>
+            <TextBlock Text="显示底图:"
+                       Margin="10,0,0,0"/>
+            <StackPanel  Orientation="Horizontal"
+                         VerticalAlignment="Center"
+                         Margin="10,0,0,0">
+                <RadioButton Name="rbtDisplayDXF" 
+                         Content="是"/>
+                <RadioButton Name="rbtHiddenDXF" 
+                         Content="否"
+                             Margin="5,0,0,0"/>
+            </StackPanel>
+     
+        </StackPanel>
+        <WindowsFormsHost Name="wfh" Grid.Row="1" Background="Black">
+            <c:MapControlWrapper/>
+        </WindowsFormsHost>
+
+        <StackPanel Grid.Row="2"   Orientation="Horizontal" 
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+            <TextBlock Text="X ="/>
+            <TextBlock Name="tbkX" Width="100"/>
+            <TextBlock Text="Y ="/>
+            <TextBlock Name="tbkY" Width="100"/>
+        </StackPanel>
+    </Grid>
+</Window>

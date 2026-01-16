@@ -1,0 +1,141 @@
+﻿<Window x:Class="MainProgram.Assets.Controls.NavigationController"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="路径导航" 
+        Height="Auto"
+        Width="330"
+        SizeToContent="Height"
+        ShowInTaskbar="False"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        Topmost="True">
+    <Grid>
+        <Expander  VerticalAlignment="Stretch" >
+            <Expander.Header>
+                <Grid Margin="0,5,-5,5" Height="25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="btnPlay" Content="播放" Grid.Column="0" VerticalAlignment="Center" Width="50"  IsEnabled="False" Margin="0,0,3,0"/>
+                    <Button Name="btnPause" Content="暂停" Grid.Column="1"  VerticalAlignment="Center" Width="50" Margin="3,0,3,0"/>
+                    <Button Name="btnStop" Content="停止" Grid.Column="2" VerticalAlignment="Center" Width="50" Margin="3,0,3,0"/>
+                    <Button Name="btnExportVideo" Content="导出为视频文件" Grid.Column="3"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="False" Margin="3,0,3,0"/>
+                </Grid>
+            </Expander.Header>
+            <Grid Height="270">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.6*"/>
+                    <RowDefinition Height="0.4*"/>
+                </Grid.RowDefinitions>
+
+                <!--出发-目的地位置设置-->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Header="出发位置">
+                        <AdornerDecorator Margin="3,0,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <TextBlock Text="楼层号：" VerticalAlignment="Center"/>
+                                <TextBlock Text="功能区：" Grid.Row="1" VerticalAlignment="Center"/>
+
+                                <ComboBox Name="cboFromFloorIndex" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Width="50"/>
+                                <ComboBox Name="cboFromArea" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+                            </Grid>
+                        </AdornerDecorator>
+                    </GroupBox>
+
+                    <GroupBox Header="目标位置" Grid.Column="1">
+                        <AdornerDecorator Margin="3,0,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <TextBlock Text="楼层号：" VerticalAlignment="Center"/>
+                                <TextBlock Text="功能区：" Grid.Row="1" VerticalAlignment="Center"/>
+
+                                <ComboBox  Name="cboToFloorIndex" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Width="50"/>
+                                <ComboBox  Name="cboToArea" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+                            </Grid>
+                        </AdornerDecorator>
+                    </GroupBox>
+
+                    <GroupBox Header="楼层穿越" Grid.Row="1" Grid.ColumnSpan="2">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Name="rbtThroughByStair" Content="楼梯" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <RadioButton Name="rbtThroughByElevator" Content="电梯" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True"/>
+                        </Grid>
+           
+                    </GroupBox>
+
+                    <Button Name="btnCalcPath" Content="计算路径" Grid.Row="2" IsEnabled="False"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="5,0,5,0"/>
+                </Grid>
+
+                <!--动画设置-->
+                <GroupBox Header="动画设置" Grid.Row="1">
+                    <Grid Margin="3,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition  Width="60"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition  Width="60"/>
+                            <ColumnDefinition  />
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="持续时间：" Grid.Row="0" VerticalAlignment="Center"/>
+                        <TextBlock Text="播放模式：" Grid.Row="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="秒" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Text="相机高度:" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" ToolTip="相机距离地板的高度值"/>
+                        <TextBlock Text="米:" Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+
+
+                        <TextBox Name="tbxPlayDuration" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="2" BorderThickness="2"/>
+                        <TextBox Name="tbxCameraHeightToFloor" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="2" BorderThickness="2"/>
+                        <ComboBox Name="cboPlayMode" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100"/>
+
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </Expander>
+    </Grid>
+</Window>

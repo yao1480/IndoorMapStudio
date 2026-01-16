@@ -1,0 +1,424 @@
+﻿<UserControl
+             x:Class="SilenceComponentsBasedC1.WPF.UC_Chart.ChartModule"   
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:c1c="clr-namespace:C1.WPF.C1Chart;assembly=C1.WPF.C1Chart.4"
+             xmlns:c1="http://schemas.componentone.com/wpf/Basic" 
+             xmlns:c1chart="http://schemas.componentone.com/winfx/2006/xaml"     
+             xmlns:local="clr-namespace:SilenceComponentsBasedC1.WPF.UC_Chart"
+  
+             x:Name="UC"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000">
+
+
+    <UserControl.Resources>
+        <local:Converter_PointIndex x:Key="pointIndexConverter"/>
+
+
+        <!--ButtonStyle-->
+        <Style x:Key="buttonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle x:Name="rec" Fill="Transparent"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="rec" Property="Fill" Value="Red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+
+        <!--Dataseries的SymbolStyle-->
+        <Style x:Key="symbolStyle" TargetType="{x:Type c1c:PlotElement}">
+            <Setter Property="OpacityMask">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0" SpreadMethod="Reflect">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <TranslateTransform />
+                                <RotateTransform />
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#ff000000" Offset="0" />
+                        <GradientStop Color="#ff000000" Offset="0.25" />
+                        <GradientStop Color="#ff000000" Offset="0.5" />
+                        <GradientStop Color="#ff000000" Offset="0.75" />
+                        <GradientStop Color="#ff000000" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0" ScaleY="0.05" />
+                    </TransformGroup>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <!--加载时触发的动画特效-->
+                <EventTrigger RoutedEvent="c1c:PlotElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX" To="1" Duration="0:0:0.4" />
+                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Children[0].ScaleY" To="1" BeginTime="0:0:0.4" Duration="0:0:0.4" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+
+
+                <!--鼠标悬停时触发的特效-->
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="OpacityMask.RelativeTransform.Children[0].X" From="0" To="1" Duration="0:0:2" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetProperty="OpacityMask.RelativeTransform.Children[1].Angle" From="0" To="360" Duration="0:0:6" RepeatBehavior="Forever" />
+                                <ColorAnimation Storyboard.TargetProperty="OpacityMask.GradientStops[0].Color" To="#b0000000" Duration="0:0:1" />
+                                <ColorAnimation Storyboard.TargetProperty="OpacityMask.GradientStops[2].Color" To="#b0000000" Duration="0:0:1" />
+                                <ColorAnimation Storyboard.TargetProperty="OpacityMask.GradientStops[4].Color" To="#b0000000" Duration="0:0:1" />
+                                <DoubleAnimation Storyboard.TargetProperty="StrokeThickness" To="3" Duration="0:0:1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+
+
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="OpacityMask.RelativeTransform.Children[0].X" To="1" Duration="0:0:2" />
+                                <DoubleAnimation Storyboard.TargetProperty="OpacityMask.RelativeTransform.Children[1].Angle" To="0" Duration="0:0:2" />
+                                <ColorAnimation Storyboard.TargetProperty="OpacityMask.GradientStops[0].Color" To="#ff000000" Duration="0:0:1" />
+                                <ColorAnimation Storyboard.TargetProperty="OpacityMask.GradientStops[2].Color" To="#ff000000" Duration="0:0:1" />
+                                <ColorAnimation Storyboard.TargetProperty="OpacityMask.GradientStops[4].Color" To="#ff000000" Duration="0:0:1" />
+                                <DoubleAnimation Storyboard.TargetProperty="StrokeThickness" Duration="0:0:1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+
+        <!--Dataseries的SymbolStyle3D-->
+        <Storyboard x:Key="anim3D">
+            <DoubleAnimation Storyboard.TargetProperty="Transform.Children[0].ScaleX" From="0" To="1" Duration="0:0:0.4" />
+            <DoubleAnimation Storyboard.TargetProperty="Transform.Children[0].ScaleY" From="0" To="1" Duration="0:0:0.4" />
+            <DoubleAnimation Storyboard.TargetProperty="Transform.Children[0].ScaleZ" BeginTime="0:0:0.4" From="0.05" To="1" Duration="0:0:0.4" />
+        </Storyboard>
+        <Transform3DGroup x:Key="transform3D" x:Name="t3d">
+            <ScaleTransform3D ScaleX="0.3" ScaleY="0.3" ScaleZ="1" />
+        </Transform3DGroup>
+
+        <Style x:Key="symbolStyle3D" TargetType="{x:Type c1c:FrameworkElement3D}">
+            <Setter Property="Transform">
+                <Setter.Value>
+                    <Transform3DGroup>
+                        <ScaleTransform3D ScaleX="0" ScaleY="0" ScaleZ="0.05" />
+                    </Transform3DGroup>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Transform" Value="{x:Null}">
+                    <Trigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource anim3D}" />
+                    </Trigger.ExitActions>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Transform.Children[0].ScaleZ" From="1" To="1.25" BeginTime="0:0:0" Duration="0:0:0.5" DecelerationRatio="0.5" RepeatBehavior="Forever" AutoReverse="True" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Transform.Children[0].ScaleZ" To="1" BeginTime="0:0:0" Duration="0:0:0.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+
+
+
+
+
+        <!--PointToolTipTemplate-->
+        <DataTemplate x:Key="pointToolTipTemplate">
+            <Border>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Series: " 
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Series}"
+                               HorizontalAlignment="Left" 
+                               Margin="5,0,0,0"/>
+
+                    <TextBlock Grid.Row="1" 
+                               Text="X: " 
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="1" 
+                               Text="{Binding Name}" 
+                               HorizontalAlignment="Left" 
+                               Margin="5,0,0,0"/>
+
+                    <TextBlock Grid.Row="2"
+                               Text="Y: " 
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="1"
+                               Grid.Row="2"
+                               Text="{Binding Value}" 
+                               HorizontalAlignment="Left" 
+                               Margin="5,0,0,0"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!--PointToolTipTemplate-->
+        <DataTemplate x:Key="pointToolTipTemplate_Percentage">
+            <Border>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Series: " 
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Series}"
+                               HorizontalAlignment="Left" 
+                               Margin="5,0,0,0"/>
+
+                    <TextBlock Grid.Row="1" 
+                               Text="X: " 
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="1" 
+                               Text="{Binding Name}" 
+                               HorizontalAlignment="Left" 
+                               Margin="5,0,0,0"/>
+
+                    <TextBlock Grid.Row="2"
+                               Text="Y: " 
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="1"
+                               Grid.Row="2"
+                               Text="{Binding Path=PercentageSeries,Converter={x:Static c1chart:Converters.Format},ConverterParameter=0.00%}"
+                               HorizontalAlignment="Left" 
+                               Margin="5,0,0,0"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+
+        <!--PointLableTemplate-->
+        <DataTemplate x:Key="pointLableTemplate">
+            <!-- y-coordinate -->
+            <TextBlock Text="{Binding Path=Value}" />
+        </DataTemplate>
+
+        <!--PointLableTemplate-->
+        <DataTemplate x:Key="pointLableTemplate_Hide">
+            <!-- y-coordinate -->
+            <TextBlock Text="" />
+        </DataTemplate>
+
+
+
+        <!--PointLableTemplate in Percentage-->
+        <DataTemplate x:Key="percentage_pointLableTemplate">
+            <TextBlock Text="{Binding Path=PercentageSeries,
+          Converter={x:Static c1chart:Converters.Format},
+          ConverterParameter=0.00%}"/>
+        </DataTemplate>
+
+
+
+
+
+
+
+
+
+
+
+        <!--获取内置调色板类型-->
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="chartPalettes">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="c1c:ColorGeneration" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+    </UserControl.Resources>
+
+
+
+    <Grid>
+        <Border BorderBrush="Black" 
+            BorderThickness="2"
+            Background="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+
+
+                <Grid Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" 
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal"
+					Margin="10,0,0,0">
+                            <TextBlock Text="图表类型:"
+						VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cboChartTypes"
+                                      x:FieldModifier="public"
+						     Width="100"
+                              Margin="5,0,0,0">
+
+                                <ComboBoxItem Content="柱状图" Tag="Column"/>
+                                <ComboBoxItem Content="折线图" Tag="LineSymbols"/>
+                                <ComboBoxItem Content="饼图" Tag="Pie"/>
+                                <ComboBoxItem Content="柱状图(3D)" Tag="Column3D"/>
+                                <ComboBoxItem Content="饼图(3D)" Tag="Pie3DExploded"/>
+                                <ComboBoxItem Content="缎带(3D)" Tag="Ribbon"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+					Margin="10,0,0,0">
+                            <TextBlock Text="调色板:"
+						VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cboPalatte"
+						      Width="100"
+                              Margin="5,0,0,0"
+                              ItemsSource="{Binding Source={StaticResource chartPalettes}}" 
+                              />
+                        </StackPanel>
+
+
+                        <StackPanel Orientation="Horizontal"
+                                Margin="10,0,0,0">
+
+                            <TextBlock Text="是否显示Y值: " 
+                                       VerticalAlignment="Center"/>
+
+                            <RadioButton x:Name="rbtShowYValue" Content="是"
+                                         Margin="5,0,0,0"
+                                         VerticalAlignment="Center"/>
+
+                            <RadioButton x:Name="rbtHideYValue"
+                                         Content="否"
+                                         Margin="15,0,0,0"
+                                         VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+
+
+
+
+
+
+
+
+                    <StackPanel Orientation="Horizontal"
+				                HorizontalAlignment="Right"
+				                Margin="0,0,0,0"
+                                Visibility="{Binding ElementName=UC, Path=RightTopControlsVisibility}">
+                        <c1:C1HyperlinkButton x:Name="hbtnExportPicture"
+					Content="图片导出" 
+					VerticalAlignment="Center"
+					Margin="0,0,10,0"/>
+
+                        <c1:C1HyperlinkButton x:Name="hbtnPrintPicture"
+					Content="打印" 
+					VerticalAlignment="Center"
+					Margin="0,0,10,0"/>
+
+
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      Name="gridMapArea">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Name="tbkChartTitle"
+                           x:FieldModifier="public"
+                           Grid.Row="0"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           Margin="0,5,0,0"
+                           TextAlignment="Center"
+                           Background="Transparent"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Text=""/>
+
+                    <Grid Name="gridChartArea" Grid.Row="1" >
+                        <c1chart:C1Chart  Name="chart" 
+                                      x:FieldModifier="public"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch"
+                                      Margin="0,10,0,0">
+
+                            <c1chart:C1ChartLegend  
+                                           Orientation="{Binding ElementName=UC, Path=Legend_Orientation}"
+                                           Position="{Binding ElementName=UC, Path=Legend_Position}"/>
+                        </c1chart:C1Chart>
+                    </Grid>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

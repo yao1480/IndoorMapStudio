@@ -1,0 +1,67 @@
+﻿<HTML>
+  <HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>3D multipatch examples</TITLE>
+    <LINK REL="stylesheet" TYPE="text/css" HREF="http://help.arcgis.com/en/sdk/10.0/common/style/esri_sdk_web.css">
+  </HEAD>
+  <BODY topmargin="0" id="bodyID" class="dtBODY">
+    <div class="sdk_topic">
+      <div id="nsbanner" esri_sdk_guid="086497b3-de6f-4042-8b5a-7ac7324198e7" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+        <div id="TitleRow" class="bannertitle">
+          <table class="titleWithBackground">
+            <td>
+              <H1>3D multipatch examples<a name="ICallout"></a></H1>
+            </td>
+          </table>
+        </div>
+      </div><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><div class="main">
+        <fieldset class="Property" style="width: auto" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+          <legend class="PropertyName">Purpose</legend><span class="PropertyValue"><purpose>
+    <div xmlns="http://www.w3.org/1999/xhtml">This sample shows how various multipatch geometries can be programmatically constructed—alone, from a single patch (TriangleStrip, TriangleFan, Triangles, and Ring examples), from a series of Rings (RingGroup examples), through the assistance of the Vector3D class (Vector3D examples), via extrusion of base 2D geometries (Extrusion examples), and from multiple patches of varying types (Composite examples). Examples have also been provided showing how these geometries can be rotated, scaled, and repositioned via the <a href="/API/esriGeometry/ITransform3D.htm" target="_blank">ITransform3D</a> interface.</div>
+    <div xmlns="http://www.w3.org/1999/xhtml">By studying these examples, a user can gain insight into the types of shapes the multipatch geometry type can encompass and identify cases where it is appropriate to use, to model 3D entities in a geographic information system (GIS). </div>
+  </purpose></span></fieldset><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><h4>How to use</h4>
+        <p>See 
+        <a href="http://help.arcgis.com/en/sdk/10.1/arcobjects_net/conceptualhelp/index.html#/how_to_use_arcgis_samples/0001000001w2000000/">How to use ArcGIS samples</a>
+        for help running the sample.</p>
+        <div class="howToUseTitle">Running the sample</div>
+        <ol>
+          <li>Start Visual Studio.</li>
+          <li>Click Debug and click Start Debugging, or compile the sample and run the created .exe file. </li><br></ol>
+        <div class="howToUseTitle">Using the sample</div>
+        <ol>
+          <li>When the sample starts, you will see x-, y-, z-axes rendered in an embedded SceneControl and buttons on the right side of the form. </li>
+          <li>Click a button on the right side of the Windows form's user interface (UI) to render the selected example in the embedded SceneControl with the x-, y-, z-axes (left in place to clarify where the multipatch is positioned in 3D space). The geometry is rendered with a solid fill color and the outline that makes up the multipatch geometry is rendered for illustrative purposes.</li>
+          <li>The header for the sections of buttons indicates the type of geometry that is rendered, and each of the numbered buttons corresponds to a different example of that type of geometry. For example, clicking the 1 button on the Composite section shows two cylinders and two pyramids. Clicking the 3 button on the Composite section results in the house shown in the following illustration. Each click clears the screen allowing the recently clicked item to appear. </li>
+          <li>To rotate the displayed multipatch, click and drag the SceneControl. Move left and right to move around in the same horizontal plane, and move the mouse pointer up and down to rotate vertically.</li>
+          <li>To zoom out, right-click and hold down the mouse button while moving the mouse pointer away from you. </li>
+          <li>To zoom in, right-click and hold down the mouse button while moving the mouse pointer towards you. See the following illustration:</li><br><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><img src="./bitmaps/086497b3-de6f-4042-8b5a-7ac7324198e71.png" alt="Illustration showing multipatch example UI after adding geometries." xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"></ol>
+        <h4>Additional information</h4>
+    <div>If you are working in a 2D environment, the code to create the multipatch items are the same. Write your class to draw them, as the one used in this example draws in 3D. If you are working in 2D with these multipoint items, no extension (neither 3D Analyst for ArcGIS for Desktop Basic, ArcGIS for Desktop Standard, and ArcGIS for Desktop, nor 3D for ArcGIS Engine) is required. </div>
+  <br><br><br><br><hr tabIndex="-1" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><table class="dtTable" cellspacing="0" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+          <tr>
+            <th>Development licensing</th>
+            <th>Deployment licensing</th>
+          </tr>
+          <tr style="empty-cells:show">
+            <td>Engine Developer Kit</td>
+            <td>ArcGIS for Desktop Basic: 3D Analyst</td>
+          </tr>
+          <tr style="empty-cells:show">
+            <td>
+            </td>
+            <td>ArcGIS for Desktop Standard: 3D Analyst</td>
+          </tr>
+          <tr style="empty-cells:show">
+            <td>
+            </td>
+            <td>ArcGIS for Desktop Advanced: 3D Analyst</td>
+          </tr>
+          <tr style="empty-cells:show">
+            <td>
+            </td>
+            <td>Engine: 3D Analyst</td>
+          </tr>
+        </table><br xmlns:MSHelp="http://msdn.microsoft.com/mshelp"><br><br></div>
+    </div>
+  </BODY>
+</HTML>

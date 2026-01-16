@@ -1,0 +1,31 @@
+﻿<Page x:Class="MainProgram.Pages.Page_Map3D"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:c="clr-namespace:MainProgram.Assets.Controls"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="700"
+	Title="Page_2DMap">
+
+    <Grid Background="White" Opacity="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <WindowsFormsHost Name="winformHost" Background="White">
+            <c:SceneControlWrapper x:Name="scWrapper"/>
+        </WindowsFormsHost>
+
+
+
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button  Name="btnLast" Content="上一步"  VerticalAlignment="Center" Margin="0,0,20,0" Width="100"/>
+            <Button  Name="btnCreateMapData3D" Content="生成3D地图数据" IsEnabled="True" VerticalAlignment="Center" Margin="20,0,20,0" Width="100"/>
+            <Button  Name="btnNext" Content="下一步"  VerticalAlignment="Center" Margin="20,0,0,0" Width="100" IsEnabled="False"/>
+        </StackPanel>
+
+    </Grid>
+</Page>

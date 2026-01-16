@@ -1,0 +1,235 @@
+﻿<Page x:Class="MainProgram.Pages.Page_DrawingParsing"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:chr="clr-namespace:SilenceComponentsBasedC1.WPF.UC_Chart;assembly=SilenceComponentsBasedC1.WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1000"
+	Title="Page_DrawingParsing">
+
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="DataGrid">
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            </Style>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto" MinHeight="150"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="图纸解析结果" FontSize="18" FontWeight="Bold" Foreground="Red"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <GroupBox Header="闭合环统计"  FontSize="15" Grid.Row="1" Foreground="Blue">
+            <AdornerDecorator >
+                <DataGrid  Name="dgRing" Margin="5"
+                           HorizontalScrollBarVisibility="Hidden">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="图层类型" Width="0.2*" IsReadOnly="True"  Binding="{Binding Path=PType}"/>
+                        <DataGridTextColumn Header="完整闭合环(个)" Width="0.2*" IsReadOnly="True"  Binding="{Binding Path= Num_Rings}"/>
+                        <DataGridTextColumn Header="残缺闭合环(个)" Width="0.2*" IsReadOnly="True"  Binding="{Binding  Path= Num_IncomRings}"/>
+                        <DataGridTextColumn Header="孤立图元(个)" Width="0.2*" IsReadOnly="True"  Binding="{Binding  Path= Num_IsolatedLines}"/>
+                        <DataGridTextColumn Header="结果评估" Width="0.2*" IsReadOnly="True"  Foreground="Blue" Binding="{Binding  Path= Correct}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </AdornerDecorator>
+        </GroupBox>
+
+        <GroupBox Header="结果评价"  FontSize="15" Grid.Row="2" Foreground="Blue">
+            <AdornerDecorator >
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.4*"/>
+                        <RowDefinition Height="0.6*"/>
+                    </Grid.RowDefinitions>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="完整闭合环(个)：" HorizontalAlignment="Right" Foreground="Black"/>
+                        <TextBlock Name="tbkRings"  Grid.Column="1"   HorizontalAlignment="Right" Foreground="Black"/>
+                        <TextBlock Text="残缺闭合环(个):" Grid.Column="2"  HorizontalAlignment="Right" Foreground="Black"/>
+                        <TextBlock Name="tbkImcopRings" Grid.Column="3"  HorizontalAlignment="Right" Foreground="Black"/>
+                        <TextBlock Text="孤立图元(个):" Grid.Column="4"  HorizontalAlignment="Right" Foreground="Black"/>
+                        <TextBlock Name="tbkIsolatedLines"  Grid.Column="5"  HorizontalAlignment="Right" Foreground="Black"/>
+                    </Grid>
+
+                    <TextBlock Name="tbkResultNotice"
+                               Grid.Row="1" Text="不 通 过！" FontSize="20" FontWeight="ExtraBlack" Foreground="Red"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0"/>
+
+                </Grid>
+
+            </AdornerDecorator>
+        </GroupBox>
+
+        <GroupBox Header="解析结果"  FontSize="15" Grid.Row="3" Foreground="Blue">
+            <AdornerDecorator >
+                <TabControl Margin="5" >
+                    
+
+                    <TabItem Header="门" Width="120">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="440"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <DataGrid Name="dgDoor" Margin="5">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="ID" Width="50" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  TextAlignment="Center" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="类型"   Width="0.15*" IsReadOnly="True"   Binding="{Binding Path=Type,Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="宽(mm)"  Width="0.15*" IsReadOnly="True"   Binding="{Binding Path=Length, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="厚(mm)"  Width="0.15*" IsReadOnly="True"  Binding="{Binding Path=Width, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="高(mm)"  Width="0.15*" IsReadOnly="True"  Binding="{Binding Path=Height, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="插入点(mm)" Width="0.27*" IsReadOnly="True"  Binding="{Binding Path=InsertPoint, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="旋转角(°)" Width="0.07*" IsReadOnly="True"  Binding="{Binding Path=AngleToXAxis, Mode=OneTime}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+
+                            <chr:ChartModule Name="chart_Door" Grid.Column="2"/>
+
+                            <GridSplitter Grid.Column="1" Style="{StaticResource gridSplitterStyleForResizeColumns }"/>
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="窗" Width="120">
+                            <DataGrid Name="dgWindow" Margin="5">
+                                <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="ID" Width="50" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  TextAlignment="Center" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="类型"   Width="0.15*" IsReadOnly="True"  Binding="{Binding Path=Type,Mode=OneTime}"/>
+                                <DataGridTextColumn Header="宽(mm)"  Width="0.15*" IsReadOnly="True"  Binding="{Binding Path=Length, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="厚(mm)"  Width="0.15*"  IsReadOnly="True" Binding="{Binding Path=Width, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="高(mm)" Width="0.15*" IsReadOnly="True"  Binding="{Binding Path=Height, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="插入点(mm)" Width="0.27*" IsReadOnly="True"  Binding="{Binding Path=InsertPoint, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="旋转角(mm)" Width="0.07*" IsReadOnly="True"  Binding="{Binding Path=AngleToXAxis, Mode=OneTime}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="楼梯" Width="120">
+                          <DataGrid Name="dgStairs" Margin="5">
+                                <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="ID" Width="50" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  TextAlignment="Center" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="踏步数(级)" IsReadOnly="True"   Width="0.1*" Binding="{Binding Path=StepNum, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="踏步宽(mm)"  IsReadOnly="True"  Width="0.1*" Binding="{Binding Path=Width_Step, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="踏步高(mm)" IsReadOnly="True" Width="0.1*"  Binding="{Binding Path=Height_Step, Mode=OneTime}"/>
+
+                                <DataGridTextColumn Header="平台宽(mm)"  IsReadOnly="True" Width="0.1*"  Binding="{Binding Path=Width_Land,Mode=OneTime}"/>
+                                <DataGridTextColumn Header="梯间宽(级)" IsReadOnly="True"  Width="0.1*" Binding="{Binding Path=Width_Staircase, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="梯段宽(mm)"  IsReadOnly="True" Width="0.1*" Binding="{Binding Path=Width_Stairway, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="楼梯井宽(mm)" IsReadOnly="True"  Width="0.1*" Binding="{Binding Path=Width_Stairwell, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="上楼位置" IsReadOnly="True"  Width="0.1*" Binding="{Binding Path=UpstairPosition, Mode=OneTime}"/>
+
+                                <DataGridTextColumn Header="插入点(mm)" IsReadOnly="True" Width="0.18*" Binding="{Binding Path=InsertPoint, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="旋转角(°)" IsReadOnly="True"  Width="0.05*" Binding="{Binding Path=RotateAngle, Mode=OneTime}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                    </TabItem>
+
+                    <TabItem  Header="电梯" Width="120">
+                          <DataGrid Name="dgElevator" Margin="5">
+                                <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="ID" Width="50" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  TextAlignment="Center" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="类型"  IsReadOnly="True"    Width="0.1*" Binding="{Binding Path=Type,Mode=OneTime}"/>
+                                <DataGridTextColumn Header="宽(mm)"  IsReadOnly="True" Width="0.1*" Binding="{Binding Path=Width, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="深(mm)" IsReadOnly="True"  Width="0.1*" Binding="{Binding Path=Depth, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="高(mm)"  IsReadOnly="True" Width="0.1*" Binding="{Binding Path=Height, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="电梯门宽(mm)"  IsReadOnly="True" Width="0.1*" Binding="{Binding Path=Width_Door, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="电梯门厚(mm)"  IsReadOnly="True" Width="0.1*" Binding="{Binding Path=Thickness_Door, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="电梯门高(mm)"  IsReadOnly="True" Width="0.1*" Binding="{Binding Path=Height_Door, Mode=OneTime}"/>
+
+
+                                <DataGridTextColumn Header="插入点" IsReadOnly="True" Width="0.18*"  Binding="{Binding Path=InsertPoint, Mode=OneTime}"/>
+                                <DataGridTextColumn Header="旋转角(°)" IsReadOnly="True" Width="0.05*" Binding="{Binding Path=RotateAngle, Mode=OneTime}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="功能区统计" Width="120">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition  Width="440"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <DataGrid Name="dgFuncRegion" Margin="5">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="ID" Width="50" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  TextAlignment="Center" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="空间类型" Width="0.2*" IsReadOnly="True"   Binding="{Binding Path=PType,Mode=OneTime}"  />
+                                    <DataGridTextColumn Header="门(扇)" Width="0.1*" IsReadOnly="True"  Binding="{Binding Path=NumOfDoor, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="窗(扇)" Width="0.1*" IsReadOnly="True"  Binding="{Binding Path=NumOfWindow, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="面积(㎡)" Width="0.3*" IsReadOnly="True"  Binding="{Binding Path=Area, Mode=OneTime}"/>
+                                    <DataGridTextColumn Header="周长(m)" Width="0.3*" IsReadOnly="True"   Binding="{Binding Path=Circumference, Mode=OneTime}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <chr:ChartModule Name="chart_Polygon" Grid.Column="2" />
+
+
+
+                            <GridSplitter Grid.Column="1" Style="{StaticResource gridSplitterStyleForResizeColumns }"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </AdornerDecorator>
+        </GroupBox>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button  Name="btnLast" Content="上一步"  VerticalAlignment="Center" Margin="0,0,20,0" Width="100"/>
+            <Button  Name="btnParsingDrawing" Content="解析图纸" IsEnabled="False" VerticalAlignment="Center" Margin="20,0,20,0" Width="100"/>
+            <Button  Name="btnNext" Content="下一步"  VerticalAlignment="Center" Margin="20,0,0,0" Width="100" IsEnabled="False"/>
+        </StackPanel>
+    </Grid>
+</Page>

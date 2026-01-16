@@ -1,0 +1,385 @@
+﻿<Window x:Class="MainProgram.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow"
+        
+        MinHeight="750" MinWidth="1000"
+        ShowInTaskbar="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        WindowState="Normal">
+
+
+
+    <Grid Name="gridRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--首行-->
+        <Grid  Name="gridTop" Background="#333436">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!--左侧隐藏按钮-->
+            <StackPanel Orientation="Horizontal">
+                <Button Name="btnHideOrShow"   
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Margin="20,0,0,0"
+>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Width="32" Height="32"
+                              Background="Transparent">
+                                <Ellipse Name="ellipse1" Stroke="White" Fill="White" >
+                                </Ellipse>
+                                <Ellipse Name="ellipse2"  Stroke="White" Fill="#333436"  Margin="1,1,1,1">
+                                </Ellipse>
+                                <Path Name="path1" Stroke="White" StrokeThickness="2"
+                                      Data="M 16,8 L8,16 16,24"/>
+                                <Path Name="path2"  Stroke="White" StrokeThickness="2"
+                                      Data="M 8,16 l 16,0"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ellipse1" Property="Fill">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="#FF7F44"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="ellipse1" Property="Stroke">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="#FF7F44"/>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter TargetName="ellipse2" Property="Stroke">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="#FF7F44"/>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter TargetName="path1" Property="Stroke">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="#FF7F44"/>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter TargetName="path2" Property="Stroke">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="#FF7F44"/>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+
+
+
+                    </Button.Template>
+                    <Button.RenderTransform>
+                        <RotateTransform  CenterX="16" CenterY="16" Angle="0"/>
+                    </Button.RenderTransform>
+                </Button>
+                <TextBlock Name="tbkHideOrShow" Text="隐藏侧栏" Foreground="AliceBlue" FontFamily="Calibri" FontSize="12"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0"/>
+            </StackPanel>
+
+            <!--主模块-->
+            <TabControl Name="tabMainMenu" TabStripPlacement="Top" Grid.Column="1" Style="{StaticResource TitleTabControlStyle}" >
+                <TabItem Header="文    件"/>
+                <TabItem Header="CAD 视图"/>
+                <TabItem Header="图纸配置"/>
+                <TabItem Header="图纸解析"/>
+                <TabItem Header="2D Map"/>
+                <TabItem Header= "3D Map"/>
+            </TabControl>
+
+            <!--窗口大小控制按钮-->
+            <StackPanel Grid.Column="2"
+                        HorizontalAlignment="Right" VerticalAlignment="Stretch" 
+                        Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style x:Key="miniMaxButtonStyle" TargetType="Button">
+                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Grid>
+                                        <Rectangle x:Name="rec" Fill="Transparent"/>
+                                        <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter TargetName="rec" Property="Fill" Value="#515151"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style x:Key="closeButonStyle" TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Grid>
+                                        <Rectangle x:Name="rec" Fill="Transparent"/>
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter TargetName="rec" Property="Fill" Value="Red"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </StackPanel.Resources>
+
+                <!--最小化窗口-->
+                <Button  x:Name="btnMinimize"  
+                         Width="25"
+                         Style="{StaticResource miniMaxButtonStyle}">
+                    <Line X1="0" Y1="7" X2="15" Y2="7" Stroke="White" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Button>
+
+                <!--最大化窗口-->
+                <Button  x:Name="btnMaxNormal"  
+                         Width="25"
+                         Style="{StaticResource miniMaxButtonStyle}">
+                    <Grid>
+                        <Path Name="pathNormal"
+                              Data="M0,6 l 0,9 12,0 0,-9 -12,0z M4,6 l 0,-4 12,0 0,9 -4,0" 
+                              Stroke="White" StrokeThickness="2"
+                              HorizontalAlignment="Center"
+                              Visibility="Hidden"/>
+                        <Path Name="pathMax1"
+                              Data="M0,2 l 15,0" 
+                              Stroke="White" StrokeThickness="4"
+                              HorizontalAlignment="Center"
+                              Visibility="Visible"/>
+                        <Path Name="pathMax2"
+                              Data="M0,0 l 0,15 15,0 0,-15" 
+                              Stroke="White" StrokeThickness="2"
+                              HorizontalAlignment="Center"
+                              Visibility="Visible"/>
+                    </Grid>
+                </Button>
+
+                <!--关闭窗口-->
+                <Button x:Name="btnClose" Width="25"  Style="{StaticResource closeButonStyle}">
+                    <Grid>
+                        <Line X1="0" Y1="0" X2="15" Y2="15" Stroke="White" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Line X1="0" Y1="15" X2="15" Y2="0" Stroke="White" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
+
+        <!--尾行-->
+        <Grid Name="gridSecondRow" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--导航栏-->
+            <StackPanel Name="spLeftSubMenus" Width="120"  HorizontalAlignment="Left">
+                <StackPanel.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#144E62" Offset="0.0"/>
+                        <GradientStop Color="#3691A3" Offset="0.5"/>
+                        <GradientStop Color="#144E62" Offset="1"/>
+                    </LinearGradientBrush>
+                </StackPanel.Background>
+
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="120"/>
+                        <Setter Property="Height" Value="60"/>
+
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Grid Name="grid" VerticalAlignment="Stretch">
+                                        <ContentPresenter>
+                                            <ContentPresenter.Content>
+                                                <TextBlock Name="tbk" Text="{TemplateBinding Content}" 
+                                                           Foreground="AliceBlue" FontSize="12" FontFamily="Calibri"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </ContentPresenter.Content>
+                                        </ContentPresenter>
+                                    </Grid>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="grid" Property="Background" Value="#144E62"/>
+                                            <Setter TargetName="tbk" Property="Foreground" Value="#FF7F44"/>
+                                        </Trigger>
+
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter TargetName="tbk" Property="Foreground" Value="#A9A9A9"/>
+                                        </Trigger>
+
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </StackPanel.Resources>
+
+                <StackPanel Orientation="Vertical" Visibility="Visible">
+                    <Button Name="btnOpenFile" Content="打    开"/>
+                    <Button Name="btnReset" Content="重     置"/>
+                    <Button  IsHitTestVisible="False" Height="10"/>
+                    <Button Name="btnExit" Content="退    出" VerticalAlignment="Bottom"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                    <Button Name="btnConfigFromFile" Content="从文件配置"  />
+                    <Button Name="btnExportDrawingConfig" Content="导出当前配置" />
+                    <Button Name="btnResetConfig" Content="重置"/>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                    <Button Content="导出解析结果"/>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                    <Button Content="生成3D要素"/>
+                    <Button Content="导出为 .MXD"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                    <Button Content="属性检索"/>
+                    <Button Name="btnPathRoaming" Content="路径漫游"/>
+                    <Button Content="导出为 .SXD"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            
+            
+            
+            <!--内容区-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!--导航内容区-->
+                <Frame Name="frame"/>
+                <!--状态栏-->
+                <Grid  Name="gridStatus" Grid.Row="1"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  
+                       Height="140" >
+
+                    <Button Name="btnExplandOrCollapseStatus"   Panel.ZIndex="1"
+                            VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-20,3,0"
+
+>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Width="40" Height="40"
+                              Background="Transparent">
+                                    <Ellipse Name="ellipse1" Stroke="White" Fill="#808080">
+                                    </Ellipse>
+                                    <Ellipse Name="ellipse2"  Stroke="White" Fill="White"  Margin="3,3,3,3">
+                                    </Ellipse>
+                                    <Path Name="path1" Stroke="#808080" StrokeThickness="2"
+                                      Data="M 6,20 L20,10 34,20"/>
+
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ellipse1" Property="Fill">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="#FF7F44"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter TargetName="ellipse1" Property="Stroke">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="#FF7F44"/>
+                                            </Setter.Value>
+                                        </Setter>
+
+                                        <Setter TargetName="ellipse2" Property="Stroke">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="#FF7F44"/>
+                                            </Setter.Value>
+                                        </Setter>
+
+                                        <Setter TargetName="path1" Property="Stroke">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="#FF7F44"/>
+                                            </Setter.Value>
+                                        </Setter>
+
+
+
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+
+
+
+                        </Button.Template>
+                        <Button.RenderTransform>
+                            <RotateTransform  CenterX="20" CenterY="20" Angle="180"/>
+                        </Button.RenderTransform>
+                    </Button>
+                    <Border  BorderThickness="0.8" BorderBrush="#808080" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid Background="#D6DFCE">
+                                <TextBlock Text="消息栏" HorizontalAlignment="Stretch" Margin="0,0,50,0" TextAlignment="Right"/>
+                            </Grid>
+                            <AdornerDecorator Grid.Row="1">
+                                <GroupBox Background="#FFE5E5E5">
+                                    <TextBox  Name="tbxStatus" 
+                                              Background="Transparent" Margin="3"
+                              IsReadOnly="True"
+                              Text=""
+                              FontSize="14"
+                              Foreground="Blue"
+                              TextAlignment="Left"
+                              VerticalScrollBarVisibility="Visible" 
+                              TextWrapping="Wrap"/>
+                                </GroupBox>
+                   
+                            </AdornerDecorator>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+
+
+          
+
+           
+        </Grid>
+
+    </Grid>
+</Window>
