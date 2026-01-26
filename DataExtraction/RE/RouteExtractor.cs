@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,8 +15,10 @@ namespace RE
         /// 计算普通房间内部路径集
         /// </summary>
         /// <param name="roomSP"></param>
+        /// <param name="enableSmoothing">是否启用路径平滑化</param>
+        /// <param name="smoothFactor">平滑因子(0-1)</param>
         /// <returns></returns>
-        public static List<List<Point>> Calc_CommonRoomRoutes(ref SemanticPolygon roomSP)
+        public static List<List<Point>> Calc_CommonRoomRoutes(ref SemanticPolygon roomSP, bool enableSmoothing = true, double smoothFactor = 0.3)
         {
             if (roomSP.PType == PolygonType.Wall || roomSP.PType == PolygonType.Balustrade || roomSP.PType == PolygonType.Floor || roomSP.PType == PolygonType.StairRoom || roomSP.PType == PolygonType.ElevatorShaft || roomSP.DoorPoints.Count == 0)
                 return null;
@@ -29,12 +31,12 @@ namespace RE
             Polygon polygon = (Polygon)roomSP;
             foreach (Point dp in roomSP.DoorPoints)
             {
-                pathNodes = calc_RouteNodes_FromOneDoor(dp, roomSP.FunctionRegionPoint, polygon);
+                pathNodes = calc_RouteNodes_FromOneDoor(dp, roomSP.FunctionRegionPoint, polygon, enableSmoothing, smoothFactor);
                 roomPaths.Add(pathNodes);
             }
 
 
-            List<List<Point>> nodes_betweenDoors = calc_RouteNodes_BetweenDoors(ref roomSP);
+            List<List<Point>> nodes_betweenDoors = calc_RouteNodes_BetweenDoors(ref roomSP, enableSmoothing, smoothFactor);
             if (nodes_betweenDoors != null)
                 roomPaths.AddRange(nodes_betweenDoors);
 
@@ -42,12 +44,23 @@ namespace RE
         }
 
         /// <summary>
+        /// 重载方法：保持向后兼容
+        /// </summary>
+        public static List<List<Point>> Calc_CommonRoomRoutes(ref SemanticPolygon roomSP)
+        {
+            return Calc_CommonRoomRoutes(ref roomSP, true, 0.3); // 默认启用平滑
+        }
+
+        /// <summary>
         /// 计算楼梯间内部路径节点集(高程值从XOY起算,不是楼板表面)
         /// </summary>
         /// <param name="doubeStairRooom"></param>
         /// <param name="stair"></param>
+        /// <param name="floorThickness"></param>
+        /// <param name="enableSmoothing">是否启用路径平滑化</param>
+        /// <param name="smoothFactor">平滑因子(0-1)</param>
         /// <returns></returns>
-        public static List<List<Point>> Cacl_DoubleStairRoomNodes(ref SemanticPolygon doubeStairRooom, ref Stair stair, double floorThickness)
+        public static List<List<Point>> Cacl_DoubleStairRoomNodes(ref SemanticPolygon doubeStairRooom, ref Stair stair, double floorThickness, bool enableSmoothing = true, double smoothFactor = 0.3)
         {
             if (doubeStairRooom.PType != PolygonType.StairRoom) return null;
 
@@ -129,15 +142,15 @@ namespace RE
             Polygon polygon = (Polygon)doubeStairRooom;
             foreach (var item in doubeStairRooom.DoorPoints)
             {
-                onePathNodes = calc_RouteNodes_FromOneDoor(item, goPoint0, polygon);
+                onePathNodes = calc_RouteNodes_FromOneDoor(item, goPoint0, polygon, enableSmoothing, smoothFactor);
                 roomPathNodes.Add(onePathNodes);
-                onePathNodes = calc_RouteNodes_FromOneDoor(item, goPoint1, polygon);
+                onePathNodes = calc_RouteNodes_FromOneDoor(item, goPoint1, polygon, enableSmoothing, smoothFactor);
                 roomPathNodes.Add(onePathNodes);
             }
 
 
 
-            List<List<Point>> pathNodes_betweenDoors = calc_RouteNodes_BetweenDoors(ref doubeStairRooom);
+            List<List<Point>> pathNodes_betweenDoors = calc_RouteNodes_BetweenDoors(ref doubeStairRooom, enableSmoothing, smoothFactor);
             if (pathNodes_betweenDoors != null)
                 roomPathNodes.AddRange(pathNodes_betweenDoors);
 
@@ -153,22 +166,43 @@ namespace RE
         /// <returns></returns>
         public static List<List<Point>> Calc_ElevatorShaftNodes(ref SemanticPolygon elevatorShaft, double floorHeight)
         {
+            return Calc_ElevatorShaftNodes(ref elevatorShaft, floorHeight, true, 0.3);
+        }
+
+        /// <summary>
+        /// 创建电梯井(包括电梯间内部和垂直方向路径)路径 - 带平滑参数
+        /// </summary>
+        /// <param name="elevatorShaft"></param>
+        /// <param name="floorHeight"></param>
+        /// <param name="enableSmoothing">是否启用路径平滑化</param>
+        /// <param name="smoothFactor">平滑因子(0-1)</param>
+        /// <returns></returns>
+        public static List<List<Point>> Calc_ElevatorShaftNodes(ref SemanticPolygon elevatorShaft, double floorHeight, bool enableSmoothing, double smoothFactor)
+        {
             if (elevatorShaft.PType != PolygonType.ElevatorShaft) return null;
 
             List<List<Point>> paths = new List<List<Point>>();
             List<Point> path = null;
             Polygon polygon = (Polygon)elevatorShaft;
-            Point higherSymbolicPoint =
-                new Point(elevatorShaft.FunctionRegionPoint.X, elevatorShaft.FunctionRegionPoint.Y, elevatorShaft.FunctionRegionPoint.Z + floorHeight);
             foreach (var item in elevatorShaft.DoorPoints)
             {
 
-                path = calc_RouteNodes_FromOneDoor(item, elevatorShaft.FunctionRegionPoint, polygon);
+                path = calc_RouteNodes_FromOneDoor(item, elevatorShaft.FunctionRegionPoint, polygon, enableSmoothing, smoothFactor);
 
-
-                path.Add(higherSymbolicPoint);
+                Point functionPoint = elevatorShaft.FunctionRegionPoint;
+                for (int i = 1; i <= 5; i++)
+                {
+                    double t = (double)i / 6;
+                    Point verticalPoint = new Point(
+                        functionPoint.X,
+                        functionPoint.Y,
+                        functionPoint.Z + t * floorHeight
+                    );
+                    path.Add(verticalPoint);
+                }
                 paths.Add(path);
             }
+            
             return paths;
         }
 
@@ -199,8 +233,10 @@ namespace RE
         /// 计算所有门点之间的路径(若门点之间不可视，则放弃)
         /// </summary>
         /// <param name="sp"></param>
+        /// <param name="enableSmoothing">是否启用路径平滑化</param>
+        /// <param name="smoothFactor">平滑因子(0-1)</param>
         /// <returns></returns>
-        static List<List<Point>> calc_RouteNodes_BetweenDoors(ref SemanticPolygon sp)
+        static List<List<Point>> calc_RouteNodes_BetweenDoors(ref SemanticPolygon sp, bool enableSmoothing = true, double smoothFactor = 0.3)
         {
             if (sp.DoorPoints == null || sp.DoorPoints.Count < 2)
                 return null;
@@ -224,6 +260,13 @@ namespace RE
                         onePathNodes = new List<Point>();
                         onePathNodes.Add(sp.DoorPoints[i]);
                         onePathNodes.Add(sp.DoorPoints[j]);
+                        
+                        // 对门到门的路径也应用平滑化
+                        if (enableSmoothing && onePathNodes.Count >= 3)
+                        {
+                            onePathNodes = smoothPath(onePathNodes, polygon, smoothFactor);
+                        }
+                        
                         pathNodesBetweenDoors.Add(onePathNodes);
                     }
 
@@ -231,6 +274,124 @@ namespace RE
             }
 
             return pathNodesBetweenDoors;
+        }
+
+        /// <summary>
+        /// 重载方法：保持向后兼容
+        /// </summary>
+        static List<List<Point>> calc_RouteNodes_BetweenDoors(ref SemanticPolygon sp)
+        {
+            return calc_RouteNodes_BetweenDoors(ref sp, true, 0.3);
+        }
+
+
+        /// <summary>
+        /// 使用Catmull-Rom曲线对路径进行平滑化处理
+        /// </summary>
+        /// <param name="originalPath">原始路径点</param>
+        /// <param name="polygon">房间多边形边界，用于验证平滑后的点是否在内部</param>
+        /// <param name="smoothFactor">平滑因子(0-1)，值越大曲线越平滑</param>
+        /// <returns>平滑后的路径点</returns>
+        static List<Point> smoothPath(List<Point> originalPath, Polygon polygon, double smoothFactor = 0.3)
+        {
+            if (originalPath == null || originalPath.Count < 3)
+                return originalPath;
+
+            List<Point> smoothedPath = new List<Point>();
+            
+            smoothedPath.Add(originalPath[0]);
+
+            for (int i = 1; i < originalPath.Count - 1; i++)
+            {
+                Point prev = originalPath[i - 1];
+                Point current = originalPath[i];
+                Point next = originalPath[i + 1];
+
+                Point control1 = calculateControlPoint(prev, current, smoothFactor, true);
+                Point control2 = calculateControlPoint(current, next, smoothFactor, false);
+
+                List<Point> segmentPoints = generateSmoothSegment(current, control1, control2, 5);
+
+                foreach (Point p in segmentPoints)
+                {
+                    if (isPointInPolygon(p, polygon))
+                    {
+                        smoothedPath.Add(p);
+                    }
+                }
+            }
+
+            smoothedPath.Add(originalPath[originalPath.Count - 1]);
+
+            return smoothedPath;
+        }
+
+        /// <summary>
+        /// 在三个点之间生成平滑的插值点
+        /// </summary>
+        private static List<Point> generateSmoothSegment(Point center, Point control1, Point control2, int segmentCount)
+        {
+            List<Point> segmentPoints = new List<Point>();
+
+            for (int i = 1; i <= segmentCount; i++)
+            {
+                double t = (double)i / (segmentCount + 1);
+                
+                double x = (1 - t) * (1 - t) * control1.X + 2 * (1 - t) * t * center.X + t * t * control2.X;
+                double y = (1 - t) * (1 - t) * control1.Y + 2 * (1 - t) * t * center.Y + t * t * control2.Y;
+
+                Point smoothPoint = new Point(x, y, center.Z);
+                segmentPoints.Add(smoothPoint);
+            }
+
+            return segmentPoints;
+        }
+
+        /// <summary>
+        /// 计算平滑控制点
+        /// </summary>
+        private static Point calculateControlPoint(Point p1, Point p2, double factor, bool isIncoming)
+        {
+            double offsetX = (p2.X - p1.X) * factor * 0.3;
+            double offsetY = (p2.Y - p1.Y) * factor * 0.3;
+
+            Point control = new Point();
+            if (isIncoming)
+            {
+                control.X = p2.X - offsetX;
+                control.Y = p2.Y - offsetY;
+            }
+            else
+            {
+                control.X = p1.X + offsetX;
+                control.Y = p1.Y + offsetY;
+            }
+            control.Z = p2.Z;
+
+            return control;
+        }
+
+        /// <summary>
+        /// 检查点是否在多边形内部
+        /// </summary>
+        private static bool isPointInPolygon(Point point, Polygon polygon)
+        {
+            // 使用射线法判断点是否在多边形内部
+            int intersectCount = 0;
+            Line ray = new Line(point, new Point(point.X + 100000, point.Y)); // 水平向右的射线
+
+            foreach (Line side in polygon.Lines)
+            {
+                Point intersection = null;
+                if (GeometryHelper.Calc2D_Intersection(ray, side, out intersection) == "有唯一交点"
+                    && GeometryHelper.BasicRelation_2D(side, intersection) == Relation2D_Point_Line.InLine
+                    && intersection.X > point.X) // 只计算右边的交点
+                {
+                    intersectCount++;
+                }
+            }
+
+            return intersectCount % 2 == 1; // 奇数个交点在内部
         }
 
 
@@ -242,8 +403,10 @@ namespace RE
         /// <param name="doorPoint"></param>
         /// <param name="functionAreaPoint"></param>
         /// <param name="polygon"></param>
+        /// <param name="enableSmoothing">是否启用路径平滑化</param>
+        /// <param name="smoothFactor">平滑因子(0-1)</param>
         /// <returns></returns>
-        static List<Point> calc_RouteNodes_FromOneDoor(Point doorPoint, Point functionAreaPoint, Polygon polygon)
+        static List<Point> calc_RouteNodes_FromOneDoor(Point doorPoint, Point functionAreaPoint, Polygon polygon, bool enableSmoothing, double smoothFactor)
         {
             List<Point> nodes = null;//多边形内部与某一门点之间的路径节点集,首点为门点，尾点为多边形内部抽象点，方向为从门点至抽象点
             Line dirLine = null;
@@ -299,7 +462,21 @@ namespace RE
                 }
             } while (!flag);
 
+            // 对生成的路径进行平滑化处理
+            if (enableSmoothing)
+            {
+                return smoothPath(nodes, polygon, smoothFactor);
+            }
+            
             return nodes;
+        }
+
+        /// <summary>
+        /// 重载方法：保持向后兼容
+        /// </summary>
+        static List<Point> calc_RouteNodes_FromOneDoor(Point doorPoint, Point functionAreaPoint, Polygon polygon)
+        {
+            return calc_RouteNodes_FromOneDoor(doorPoint, functionAreaPoint, polygon, true, 0.3);
         }
 
 

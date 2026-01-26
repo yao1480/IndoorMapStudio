@@ -1,0 +1,61 @@
+<Page x:Class="MainProgram.Pages.Page_PathDisplay"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="clr-namespace:MainProgram.Assets.Controls"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="Page_PathDisplay">
+    <Grid Background="White" Opacity="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 左侧导航面板 -->
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#CCCCCC" BorderThickness="0,0,1,0" Background="#F5F5F5">
+            <StackPanel Margin="10">
+                <TextBlock Text="路径导航" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" HorizontalAlignment="Center"/>
+
+                <TextBlock Text="起点：" Margin="0,10,0,5"/>
+                <ComboBox Name="cmbStartPoint" Height="25" IsEnabled="False"/>
+
+                <TextBlock Text="终点：" Margin="0,15,0,5"/>
+                <ComboBox Name="cmbEndPoint" Height="25" IsEnabled="False"/>
+
+                <Button Name="btnNavigate" Content="开始导航" Height="30" Margin="0,20,0,0" IsEnabled="False"/>
+                <Button Name="btnClearPath" Content="清除路径" Height="30" Margin="0,10,0,0" IsEnabled="False"/>
+
+                <Separator Margin="0,20,0,10"/>
+
+                <TextBlock Text="路径信息" FontWeight="Bold" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="路径长度：" />
+                    <TextBlock Name="txtPathLength" Text="--" Foreground="#0066CC"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="途经节点：" />
+                    <TextBlock Name="txtNodeCount" Text="--" Foreground="#0066CC"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- 地图控件 -->
+        <WindowsFormsHost Name="winformHost" Grid.Row="0" Grid.Column="1" Background="White">
+            <controls:MapControlWrapper x:Name="mapControlWrapper"/>
+        </WindowsFormsHost>
+
+        <!-- 底部按钮 -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button  Name="btnLast" Content="上一步"  VerticalAlignment="Center" Margin="0,0,20,0" Width="100"/>
+            <Button  Name="btnCreatePath" Content="生成路径" IsEnabled="True" VerticalAlignment="Center" Margin="20,0,20,0" Width="100"/>
+            <Button  Name="btnNext" Content="下一步"  VerticalAlignment="Center" Margin="20,0,0,0" Width="100"/>
+        </StackPanel>
+    </Grid>
+</Page>

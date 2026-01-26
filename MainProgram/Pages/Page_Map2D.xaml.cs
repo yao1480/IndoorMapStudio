@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +79,8 @@ namespace MainProgram.Pages
 
         void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            homeWindow.Navigate(PageIndex + 1);
+            //跳转到路径展示页面
+            homeWindow.Navigate(5);
         }
 
 
@@ -120,8 +121,13 @@ namespace MainProgram.Pages
         #region IPageInterfaces
         public void ActivateControls()
         {
+            //激活下一步按钮，用于跳转到路径展示页面
             btnNext.IsEnabled = true;
-            (tabMainMenu.Items[Page_Map3D.PageIndex] as TabItem).IsEnabled = true;//激活3D地图页标签
+            //激活路径展示选项卡
+            if (tabMainMenu.Items.Count > 5)
+            {
+                (tabMainMenu.Items[5] as TabItem).IsEnabled = true;
+            }
         }
         #endregion
     }

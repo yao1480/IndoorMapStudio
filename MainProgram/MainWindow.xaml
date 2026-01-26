@@ -99,7 +99,7 @@
                 <TabItem Header="图纸配置"/>
                 <TabItem Header="图纸解析"/>
                 <TabItem Header="2D Map"/>
-                <TabItem Header= "3D Map"/>
+                <TabItem Header="路径展示"/>
             </TabControl>
 
             <!--窗口大小控制按钮-->
@@ -270,7 +270,6 @@
 
                 <StackPanel Orientation="Vertical" Visibility="Collapsed">
                     <Button Content="属性检索"/>
-                    <Button Name="btnPathRoaming" Content="路径漫游"/>
                     <Button Content="导出为 .SXD"/>
                 </StackPanel>
 

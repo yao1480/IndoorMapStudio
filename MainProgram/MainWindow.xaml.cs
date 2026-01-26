@@ -1,4 +1,4 @@
-﻿//#define debug
+//#define debug
 
 using System;
 using System.Collections.Generic;
@@ -134,7 +134,7 @@ namespace MainProgram
         public Page_FloorPlanConfig page_floorPlanConfig;//图纸配置页
         public Page_DrawingParsing page_drawingParsing;//图纸解析页
         public Page_Map2D page_Map2D;//2D地图页
-        public Page_Map3D page_Map3D;//3D地图页
+        public Page_PathDisplay page_PathDisplay;//路径展示页面
         #endregion
 
         public MainWindow()
@@ -156,8 +156,7 @@ namespace MainProgram
             btnExplandOrCollapseStatus.Click += btnExplandOrCollapseStatus_Click;
             this.Loaded += MainWindow_Loaded;
 
-            //业务事件
-            btnPathRoaming.Click += btnPathRoaming_Click;
+            
             #endregion
         }
 
@@ -377,16 +376,6 @@ namespace MainProgram
         
         #endregion
 
-        #region Page_Map3D
-        //路径漫游
-        void btnPathRoaming_Click(object sender, RoutedEventArgs e)
-        {
-            if (page_Map3D == null)
-                return;
-
-            page_Map3D.PathRoaming();
-        }
-        #endregion
         #endregion
         #endregion
 
@@ -524,7 +513,7 @@ namespace MainProgram
                     goto_Page_Map2D();
                     break;
                 case 5:
-                    goto_Page_Map3D();
+                    goto_Page_PathDisplay();
                     break;
             }
         }
@@ -569,14 +558,14 @@ namespace MainProgram
 
             frame.Navigate(page_Map2D);
         }
-        void goto_Page_Map3D()
+        
+        void goto_Page_PathDisplay()
         {
-            if (page_Map3D == null)
-                page_Map3D = new Page_Map3D(this);
+            if (page_PathDisplay == null)
+                page_PathDisplay = new Page_PathDisplay(this);
 
-            frame.Navigate(page_Map3D);
+            frame.Navigate(page_PathDisplay);
         }
-
         //在指定文件夹中检索指定扩展名的第一个文件名
         private string get_FirstFileByExtension(string folderPath, string extension)
         {

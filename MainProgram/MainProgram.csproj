@@ -173,6 +173,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Page_PathDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Page_DrawingParsing.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -203,6 +207,9 @@
     </Compile>
     <Compile Include="Pages\Page_Map2D.xaml.cs">
       <DependentUpon>Page_Map2D.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Page_PathDisplay.xaml.cs">
+      <DependentUpon>Page_PathDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Page_DrawingParsing.xaml.cs">
       <DependentUpon>Page_DrawingParsing.xaml</DependentUpon>
@@ -430,6 +437,10 @@
     <ProjectReference Include="..\MapDataVisualizer\MapDataGenerator\EsriMapDataGenerator.csproj">
       <Project>{4b154260-cd9a-4234-9013-dd68c544225d}</Project>
       <Name>EsriMapDataGenerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataExtraction\RE\RE.csproj">
+      <Project>{2fcef6e7-9f2a-4dbf-a678-0d188db809c5}</Project>
+      <Name>RE</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

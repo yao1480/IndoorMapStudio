@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,22 +45,8 @@ namespace EsriMapDataGenerator
                     }
                 }
 
-                if (FGDBHelper.IsIntialMapDataset(ref pMapDataset3D))
-                {
-                    FeaturesCreator3D.CreateFeatures(ref floorPlan, ref pMapDataset3D);
-                    RouteNetworkCreator.CreateNetDataSet(ref pMapDataset3D, networkDatasetName, edgeSourceName);
-                }
-                else
-                {
-                    if (MessageBoxResult.Yes == MessageBox.Show("已生成Esri地图数据，是否要清除当前地图数据并重新创建？", "", MessageBoxButton.YesNo, MessageBoxImage.Warning))
-                    {
-                        FGDBHelper.ResetMapDataset3D(ref pMapDataset3D);
-
-                        FeaturesCreator3D.CreateFeatures(ref floorPlan, ref pMapDataset3D);
-                        RouteNetworkCreator.CreateNetDataSet(ref pMapDataset3D, networkDatasetName, edgeSourceName);
-                    }
-                }
-
+                // 只生成2D数据，跳过3D数据生成
+                
             }
             catch (Exception ex)
             {

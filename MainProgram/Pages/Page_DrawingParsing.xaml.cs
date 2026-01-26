@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,7 +78,8 @@ namespace MainProgram.Pages
 
         void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            homeWindow.Navigate(PageIndex + 1);
+            //直接导航到2D Map页面，跳过已删除的3D Map页面
+            homeWindow.Navigate(4);
         }
 
         void btnParsingDrawing_Click(object sender, RoutedEventArgs e)
@@ -292,9 +293,8 @@ namespace MainProgram.Pages
         {
             btnNext.IsEnabled = true;
 
-            //同时激活2/3D地图页标签
+            //只激活2D地图页标签
             (tabMainMenu.Items[Page_Map2D.PageIndex] as TabItem).IsEnabled = true;
-            (tabMainMenu.Items[Page_Map3D.PageIndex] as TabItem).IsEnabled = true;
         }
 
         #endregion

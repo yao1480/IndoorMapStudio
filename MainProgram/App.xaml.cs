@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -47,7 +47,6 @@ namespace MainProgram
                 m_AOLicenseInitializer.InitializeApplication(
                     new esriLicenseProductCode[] { esriLicenseProductCode.esriLicenseProductCodeEngine },
                     new esriLicenseExtensionCode[] {
-                        esriLicenseExtensionCode.esriLicenseExtensionCode3DAnalyst,
                         esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork,
                         esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
                         esriLicenseExtensionCode.esriLicenseExtensionCodeSchematics,

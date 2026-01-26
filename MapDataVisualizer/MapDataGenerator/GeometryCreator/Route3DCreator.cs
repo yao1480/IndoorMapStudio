@@ -19,7 +19,9 @@ namespace EsriMapDataGenerator.GeometryCreator
         /// <param name="floorPlan"></param>
         /// <param name="sides"></param>
         /// <param name="vertexes"></param>
-        public static void CreateFloorRoute(ref FloorPlan floorPlan, out List<IGeometry> sides, out List<IGeometry> vertexes)
+        /// <param name="enableSmoothing">是否启用路径平滑化</param>
+        /// <param name="smoothFactor">平滑因子(0-1)</param>
+        public static void CreateFloorRoute(ref FloorPlan floorPlan, out List<IGeometry> sides, out List<IGeometry> vertexes, bool enableSmoothing = true, double smoothFactor = 0.3)
         {
 
 
@@ -54,7 +56,7 @@ namespace EsriMapDataGenerator.GeometryCreator
                     for (int i = 0; i < sps.Count; i++)
                     {
                         sp = sps[i];
-                        paths = RE.RouteExtractor.Calc_CommonRoomRoutes(ref sp);
+                        paths = RE.RouteExtractor.Calc_CommonRoomRoutes(ref sp, enableSmoothing, smoothFactor);
                         if (paths == null) throw new Exception("生成普通房间内部路径数据失败：（0条路径）！");
 
                         for (int j = 0; j < paths.Count; j++)
@@ -91,7 +93,7 @@ namespace EsriMapDataGenerator.GeometryCreator
                     {
                         sp = sps[i];
                         stair = stairs[i];
-                        paths = RE.RouteExtractor.Cacl_DoubleStairRoomNodes(ref sp, ref stair, floorPlan.Configuration.Floor_Thickness);
+                        paths = RE.RouteExtractor.Cacl_DoubleStairRoomNodes(ref sp, ref stair, floorPlan.Configuration.Floor_Thickness, enableSmoothing, smoothFactor);
                         for (int j = 0; j < paths.Count; j++)
                         {
                             path = paths[j];
@@ -119,7 +121,7 @@ namespace EsriMapDataGenerator.GeometryCreator
                     for (int i = 0; i < sps.Count; i++)
                     {
                         sp = sps[i];
-                        paths = RE.RouteExtractor.Calc_ElevatorShaftNodes(ref sp, floorHeight);
+                        paths = RE.RouteExtractor.Calc_ElevatorShaftNodes(ref sp, floorHeight, enableSmoothing, smoothFactor);
                         if (paths == null) throw new Exception("生成电梯井内部路径数据失败：（0条路径）！");
 
                         for (int j = 0; j < paths.Count; j++)
